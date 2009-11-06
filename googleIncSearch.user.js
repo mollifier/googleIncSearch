@@ -55,64 +55,90 @@
     checkInterval : 100
   };
 
+  // var oldQuery = Utils.trim(box.value);
+  // var container = document.getElementById("res");
+  // var box = document.getElementsByName("q")[0];
+  // var requestCount = 0;
+  // var currentQuery = Utils.trim(box.value);
+  //
+  //
+  var searchState = function(initialQuery) {
+    // TODO: 未実装
+    var requestCount = 0;
+    var query = Utils.trim(initialQuery);
+    return {
+      getCurrentQuery : function() {
+      },
+      setCurrentQuery : function() {
+      },
+      queryChanged : function() {
+      },
+
+      startSearching : function() {
+      },
+      stopSearching : function() {
+      },
+      isSearching : function() {
+      }
+    };
+  };
+
   var box = document.getElementsByName("q")[0];
   var container = document.getElementById("res");
-  var oldQuery = Utils.trim(box.value);
 
   var startInc = function() {
-    var requestCount = 0;
+    var state = searchState(box.value);
 
     var inc = function() {
-      var currentQuery = Utils.trim(box.value);
+      state.setCurrentQuery(box.value);
 
-      if (currentQuery === "") {
+      if (! state.queryChanged()) {
         return;
       }
 
-      if (currentQuery === oldQuery) {
-        return;
-      }
-
-      var addItem = cache.get(currentQuery);
+      var addItem = cache.get(state.getCurrentQuery);
 
       if (! addItem) {
-        var url = "http://www.google.co.jp/search?q=" + currentQuery;
+        var url = "http://www.google.co.jp/search?q=" + state.getCurrentQuery;
 
-        (function() {
-          requestCount++;
-          console.log("GM_xmlhttpRequest");
+        (function(query) {
+          state.startSearching();
+          console.log("send url = %s", url);
           GM_xmlhttpRequest({
             method: 'GET',
             url: url,
             onload: function(res) {
-              requestCount--;
+              state.endSearching();
 
               var doc =  Utils.createHTMLDocument(res.responseText);
               responseItem = doc.getElementById("res");
-              cache.set(currentQuery, responseItem);
+              cache.set(query, responseItem);
 
               var item, newItem;
-              if (requestCount <= 0) {
-                // 結果待ちリクエストがない場合
-                item = responseItem;
-              } else {
+              if (state.isSearching()) {
+                // 別のリクエストを送信して結果待ちである場合
                 item = document.createElement("p");
                 item.innerHTML = "loading ...";
                 item.id = "res";
+              } else {
+                // 結果待ちリクエストがない場合
+                item = responseItem;
               }
+
               newItem = document.importNode(item, true);
               container.parentNode.replaceChild(newItem, container);
               container = newItem;
             }
           });
-        })();
+        })(state.getCurrentQuery);
 
       } else {
+        // キャッシュにデータがある場合
         container.parentNode.replaceChild(addItem, container);
         container = addItem;
       }
 
-      oldQuery = currentQuery;
+      // oldQuery = currentQuery;
 
     };
 
