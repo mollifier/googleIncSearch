@@ -8,11 +8,26 @@
 
 (function() {
 
-  var Cache = function() {
-    this.data = {};
+  var Utils = {
+    createHTMLDocument : function(source) {
+      var XHTML_NS = 'http://www.w3.org/1999/xhtml';
+      var doctype = document.implementation.createDocumentType('html',
+        '-//W3C//DTD HTML 4.01//EN', 'http://www.w3.org/TR/html4/strict.dtd');
+      var doc = document.implementation.createDocument(XHTML_NS, 'html', doctype);
+      var range = document.createRange();
+      range.selectNodeContents(document.documentElement);
+      var content = doc.adoptNode(range.createContextualFragment(source));
+      doc.documentElement.appendChild(content);
+      return doc;
+    },
+
+    Cache : function() {
+      this.data = {};
+    }
+
   };
 
-  Cache.prototype.get = function(key) {
+  Utils.Cache.prototype.get = function(key) {
     var ret = null;
     if (this.data.hasOwnProperty(key)) {
       ret = this.data[key];
@@ -20,22 +35,10 @@
     return ret;
   };
 
-  Cache.prototype.set = function(key, value) {
+  Utils.Cache.prototype.set = function(key, value) {
     this.data[key] = value;
   };
 
-
-  function createHTMLDocument(source) {
-    var XHTML_NS = 'http://www.w3.org/1999/xhtml';
-    var doctype = document.implementation.createDocumentType('html',
-      '-//W3C//DTD HTML 4.01//EN', 'http://www.w3.org/TR/html4/strict.dtd');
-    var doc = document.implementation.createDocument(XHTML_NS, 'html', doctype);
-    var range = document.createRange();
-    range.selectNodeContents(document.documentElement);
-    var content = doc.adoptNode(range.createContextualFragment(source));
-    doc.documentElement.appendChild(content);
-    return doc;
-  }
 
   var box = document.getElementsByName("q")[0];
   var container = document.getElementById("res");
@@ -69,7 +72,7 @@
             onload: function(res) {
               requestCount--;
 
-              var doc =  createHTMLDocument(res.responseText);
+              var doc =  Utils.createHTMLDocument(res.responseText);
               responseItem = doc.getElementById("res");
               cache.set(currentQuery, responseItem);
 
@@ -108,7 +111,7 @@
 
   };
 
-  var cache = new Cache();
+  var cache = new Utils.Cache();
 
   box.addEventListener("keyup", startInc, false);
 })();
