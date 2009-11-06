@@ -8,6 +8,7 @@
 
 (function() {
 
+  // ユーティリティ関数
   var Utils = {
     createHTMLDocument : function(source) {
       var XHTML_NS = 'http://www.w3.org/1999/xhtml';
@@ -43,6 +44,16 @@
     this.data[key] = value;
   };
 
+  // 設定値
+  var Config = {
+    // 入力値の変化をチェックする時間(msec)
+    // キー入力を開始してからこの間だけ
+    // 値が変わったかどうかを周期的にチェックする
+    valueChangeCheckTime : 4000,
+
+    // テキストボックスの入力値の変化をチェックする間隔(msec)
+    checkInterval : 100
+  };
 
   var box = document.getElementsByName("q")[0];
   var container = document.getElementById("res");
@@ -106,12 +117,12 @@
     };
 
     box.removeEventListener("keyup", startInc, false);
-    var intervalId = window.setInterval(inc, 100);
+    var intervalId = window.setInterval(inc, Config.checkInterval);
 
     window.setTimeout(function() {
       window.clearTimeout(intervalId);
       box.addEventListener("keyup", startInc, false);
-    }, 4000);
+    }, Config.valueChangeCheckTime);
 
   };
 
