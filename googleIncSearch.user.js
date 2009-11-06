@@ -55,6 +55,7 @@
     checkInterval : 100
   };
 
+  // 現在の検索状態
   var searchState = function(initialQuery) {
     var requestCount = 0;
     var currentQuery = Utils.trim(initialQuery);
@@ -98,10 +99,10 @@
   var box = document.getElementsByName("q")[0];
   var container = document.getElementById("res");
 
-  var startInc = function() {
+  var initIncSearch = function() {
     var state = searchState(box.value);
 
-    var inc = function() {
+    var doIncSearch = function() {
       var queryChanged = state.setCurrentQuery(box.value);
 
       if (! queryChanged) {
@@ -151,18 +152,18 @@
       }
     };
 
-    box.removeEventListener("keyup", startInc, false);
-    var intervalId = window.setInterval(inc, Config.checkInterval);
+    box.removeEventListener("keyup", initIncSearch, false);
+    var intervalId = window.setInterval(doIncSearch, Config.checkInterval);
 
     window.setTimeout(function() {
       window.clearTimeout(intervalId);
-      box.addEventListener("keyup", startInc, false);
+      box.addEventListener("keyup", initIncSearch, false);
     }, Config.valueChangeCheckTime);
 
   };
 
   var cache = new Utils.Cache();
 
-  box.addEventListener("keyup", startInc, false);
+  box.addEventListener("keyup", initIncSearch, false);
 })();
 
