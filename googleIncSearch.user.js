@@ -55,30 +55,42 @@
     checkInterval : 100
   };
 
-  // var oldQuery = Utils.trim(box.value);
-  // var container = document.getElementById("res");
-  // var box = document.getElementsByName("q")[0];
-  // var requestCount = 0;
-  // var currentQuery = Utils.trim(box.value);
-  //
-  //
   var searchState = function(initialQuery) {
-    // TODO: 未実装
     var requestCount = 0;
-    var query = Utils.trim(initialQuery);
+    var currentQuery = Utils.trim(initialQuery);
+    var oldQuery = "";
+
     return {
       getCurrentQuery : function() {
+        return currentQuery;
       },
-      setCurrentQuery : function() {
-      },
-      queryChanged : function() {
+
+      // @return : 設定値が変更された場合 true
+      //           そうでない場合 false
+      setCurrentQuery : function(q) {
+        var ret = false;
+        var query = Utils.trim(q);
+
+        if (query !== "" && query !== currentQuery) {
+          oldQuery = currentQuery;
+          currentQuery = query;
+
+          ret = true;
+        }
+
+        return ret;
       },
 
       startSearching : function() {
+        requestCount++;
       },
       stopSearching : function() {
+        if (requestCount > 0) {
+          requestCount--;
+        }
       },
       isSearching : function() {
+        return requestCount > 0;
       }
     };
   };
@@ -90,9 +102,9 @@
     var state = searchState(box.value);
 
     var inc = function() {
-      state.setCurrentQuery(box.value);
+      var queryChanged = state.setCurrentQuery(box.value);
 
-      if (! state.queryChanged()) {
+      if (! queryChanged) {
         return;
       }
 
@@ -103,12 +115,12 @@
 
         (function(query) {
           state.startSearching();
-          console.log("send url = %s", url);
+          console.log("send request : url = %s", url);
           GM_xmlhttpRequest({
             method: 'GET',
             url: url,
             onload: function(res) {
-              state.endSearching();
+              state.stopSearching();
 
               var doc =  Utils.createHTMLDocument(res.responseText);
               responseItem = doc.getElementById("res");
@@ -137,9 +149,6 @@
         container.parentNode.replaceChild(addItem, container);
         container = addItem;
       }
-
-      // oldQuery = currentQuery;
-
     };
 
     box.removeEventListener("keyup", startInc, false);
