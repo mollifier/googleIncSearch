@@ -21,6 +21,10 @@
       return doc;
     },
 
+    trim : function(text) {
+      return text.replace(/^\s+/, "").replace(/\s+$/, "");
+    },
+
     Cache : function() {
       this.data = {};
     }
@@ -42,13 +46,13 @@
 
   var box = document.getElementsByName("q")[0];
   var container = document.getElementById("res");
-  var oldQuery = box.value.replace(/^\s+/, "").replace(/\s+$/, "");
+  var oldQuery = Utils.trim(box.value);
 
   var startInc = function() {
     var requestCount = 0;
 
     var inc = function() {
-      var currentQuery = box.value.replace(/^\s+/, "").replace(/\s+$/, "");
+      var currentQuery = Utils.trim(box.value);
 
       if (currentQuery === "") {
         return;
