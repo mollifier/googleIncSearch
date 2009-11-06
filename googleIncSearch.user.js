@@ -100,6 +100,9 @@
   var container = document.getElementById("res");
 
   var initIncSearch = function() {
+    // 2回初期化されないようにするために
+    // すぐにイベントハンドラを削除する
+    box.removeEventListener("keyup", initIncSearch, false);
     var state = searchState(box.value);
 
     var doIncSearch = function() {
@@ -152,7 +155,6 @@
       }
     };
 
-    box.removeEventListener("keyup", initIncSearch, false);
     var intervalId = window.setInterval(doIncSearch, Config.checkInterval);
 
     window.setTimeout(function() {
