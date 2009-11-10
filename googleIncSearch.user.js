@@ -26,22 +26,28 @@
       return text.replace(/^\s+/, "").replace(/\s+$/, "");
     },
 
-    Cache : function() {
-      this.data = {};
+    // キャッシュオブジェクトを作成する
+    createCache : function() {
+      var data = {};
+
+      return {
+        // キャッシュのデータを取得する
+        // キャッシュにない場合は null を返す
+        get : function(key) {
+          var ret = null;
+          if (data.hasOwnProperty(key)) {
+            ret = data[key];
+          }
+          return ret;
+        },
+
+        // キャッシュに値を設定する
+        set : function(key, value) {
+          data[key] = value;
+        }
+      };
     }
 
-  };
-
-  Utils.Cache.prototype.get = function(key) {
-    var ret = null;
-    if (this.data.hasOwnProperty(key)) {
-      ret = this.data[key];
-    }
-    return ret;
-  };
-
-  Utils.Cache.prototype.set = function(key, value) {
-    this.data[key] = value;
   };
 
   // 設定値
@@ -164,7 +170,7 @@
 
   };
 
-  var cache = new Utils.Cache();
+  var cache = Utils.createCache();
 
   box.addEventListener("keyup", initIncSearch, false);
 })();
