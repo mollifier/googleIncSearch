@@ -112,10 +112,10 @@
         return;
       }
 
-      var addItem = cache.get(state.getCurrentQuery);
+      var addItem = cache.get(state.getCurrentQuery());
 
       if (! addItem) {
-        var url = "http://www.google.co.jp/search?q=" + state.getCurrentQuery;
+        var url = "http://www.google.co.jp/search?q=" + state.getCurrentQuery();
 
         (function(query) {
           state.startSearching();
@@ -146,7 +146,7 @@
               container = newItem;
             }
           });
-        })(state.getCurrentQuery);
+        })(state.getCurrentQuery());
 
       } else {
         // キャッシュにデータがある場合
