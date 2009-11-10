@@ -126,7 +126,7 @@
         container = addItem;
       } else {
         // キャッシュにデータがない場合
-        var url = "http://www.google.co.jp/search?q=" + state.getCurrentQuery();
+        var url = location.protocol + "//" + location.host + "/search?q=" + state.getCurrentQuery();
 
         (function(query) {
           state.startSearching();
