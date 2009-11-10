@@ -120,7 +120,12 @@
 
       var addItem = cache.get(state.getCurrentQuery());
 
-      if (! addItem) {
+      if (addItem) {
+        // キャッシュにデータがある場合
+        container.parentNode.replaceChild(addItem, container);
+        container = addItem;
+      } else {
+        // キャッシュにデータがない場合
         var url = "http://www.google.co.jp/search?q=" + state.getCurrentQuery();
 
         (function(query) {
@@ -154,11 +159,8 @@
           });
         })(state.getCurrentQuery());
 
-      } else {
-        // キャッシュにデータがある場合
-        container.parentNode.replaceChild(addItem, container);
-        container = addItem;
       }
+
     };
 
     var intervalId = window.setInterval(doIncSearch, Config.checkInterval);
