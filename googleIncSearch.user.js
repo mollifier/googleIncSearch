@@ -138,7 +138,7 @@
               state.stopSearching();
 
               var doc =  Utils.createHTMLDocument(res.responseText);
-              responseItem = doc.getElementById("res");
+              var responseItem = doc.getElementById("res");
               cache.set(query, responseItem);
 
               var item, newItem;
