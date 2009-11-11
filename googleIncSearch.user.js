@@ -6,6 +6,8 @@
 // @include http://www.google.com/search?*
 // ==/UserScript==
 
+// version : 0.0.1b
+
 (function() {
 
   // ユーティリティ関数
