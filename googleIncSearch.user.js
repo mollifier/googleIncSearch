@@ -6,6 +6,7 @@
 // @include http://www.google.com/search?*
 // ==/UserScript==
 
+// auther : mollifier http://d.hatena.ne.jp/mollifier/
 // version : 0.0.1b
 
 (function() {
