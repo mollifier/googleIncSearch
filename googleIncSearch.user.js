@@ -5,9 +5,12 @@
 // @include http://www.google.co.jp/search?*
 // @include http://www.google.com/search?*
 // ==/UserScript==
-
+//
 // auther : mollifier http://d.hatena.ne.jp/mollifier/
 // version : 0.0.1b
+//
+// GoogleIncSearch is released under the MIT License.
+// http://www.opensource.org/licenses/mit-license.php
 
 (function() {
 
