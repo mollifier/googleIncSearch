@@ -152,8 +152,8 @@
               if (state.isSearching()) {
                 // 別のリクエストを送信して結果待ちである場合
                 item = document.createElement("p");
-                item.innerHTML = "loading ...";
                 item.id = "res";
+                item.appendChild(document.createTextNode("loading ..."));
               } else {
                 // 結果待ちリクエストがない場合
                 item = responseItem;
