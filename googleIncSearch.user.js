@@ -64,7 +64,7 @@
     valueChangeCheckTime : 4000,
 
     // テキストボックスの入力値の変化をチェックする間隔(msec)
-    checkInterval : 100
+    checkInterval : 300
   };
 
   // 現在の検索状態
