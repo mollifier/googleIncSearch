@@ -170,6 +170,11 @@
 
     };
 
+    // キーを入力した瞬間からインクリメンタル検索を開始する。
+    // setInterval では Config.checkInterval 経過した後でないと
+    // 最初の1回目の doIncSearch() が呼び出されないため、
+    // 明示的に doIncSearch を呼び出す。
+    doIncSearch();
     var intervalId = window.setInterval(doIncSearch, Config.checkInterval);
 
     window.setTimeout(function() {
