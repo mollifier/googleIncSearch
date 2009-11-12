@@ -98,6 +98,7 @@
         requestCount++;
       },
       stopSearching : function() {
+        // requestCount が負の値にならないようにする
         if (requestCount > 0) {
           requestCount--;
         }
@@ -110,12 +111,12 @@
 
   var box = document.getElementsByName("q")[0];
   var container = document.getElementById("res");
+  var state = searchState(box.value);
 
   var initIncSearch = function() {
     // 2回初期化されないようにするために
     // すぐにイベントハンドラを削除する
     box.removeEventListener("keyup", initIncSearch, false);
-    var state = searchState(box.value);
 
     var doIncSearch = function() {
       var queryChanged = state.setCurrentQuery(box.value);
