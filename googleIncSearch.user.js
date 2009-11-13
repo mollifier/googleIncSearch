@@ -156,7 +156,7 @@
 
         (function(query) {
           state.startSearching();
-          console.log("send request : url = %s", url);
+          //console.log("send request : url = %s", url);
           GM_xmlhttpRequest({
             method: 'GET',
             url: url,
