@@ -122,7 +122,8 @@
 
   // 検索結果のキャッシュ
   // 以下の構造のオブジェクトである
-  //{stats : 検索結果の統計情報, container : 検索結果の内容}
+  // {stats : 検索結果の統計情報, container : 検索結果の内容}
+  // document.importNode でインポート済みのノードを格納する
   var cache = Utils.createCache();
   var state = searchState(box.value);
 
@@ -164,9 +165,13 @@
               state.stopSearching();
 
               var doc =  Utils.createHTMLDocument(res.responseText);
+
+              var tempStats = doc.getElementById("resultStats");
+              var tempContainer = doc.getElementById("res");
+
               var responseData = {
-                stats : doc.getElementById("resultStats"),
-                container : doc.getElementById("res")
+                stats : document.importNode(tempStats, true),
+                container : document.importNode(tempContainer, true)
               };
               cache.set(query, responseData);
 
@@ -184,12 +189,10 @@
               }
 
               if (addData.stats) {
-                addData.stats = document.importNode(addData.stats, true);
                 Utils.replaceNode(stats, addData.stats);
                 stats = addData.stats;
               }
 
-              addData.container = document.importNode(addData.container, true);
               Utils.replaceNode(container, addData.container);
               container = addData.container;
             }
