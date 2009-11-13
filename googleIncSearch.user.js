@@ -170,6 +170,9 @@
 
     };
 
+    // Config.valueChangeCheckTime の間、
+    // 定期的にテキストボックスの内容を監視してクエリを送信する
+
     // キーを入力した瞬間からインクリメンタル検索を開始する。
     // setInterval では Config.checkInterval 経過した後でないと
     // 最初の1回目の doIncSearch() が呼び出されないため、
@@ -179,6 +182,11 @@
 
     window.setTimeout(function() {
       window.clearTimeout(intervalId);
+      // テキストボックスの内容は変化したにもかかわらず
+      // 1度も doIncSearch 呼び出しタイミングを迎えることなく
+      // タイマーがクリアされる可能性があるため、
+      // 最後に明示的に doIncSearch を呼び出す。
+      doIncSearch();
       box.addEventListener("keyup", initIncSearch, false);
     }, Config.valueChangeCheckTime);
 
