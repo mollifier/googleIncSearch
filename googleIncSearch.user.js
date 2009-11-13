@@ -126,6 +126,9 @@
   var cache = Utils.createCache();
   var state = searchState(box.value);
 
+  cache.set(state.getCurrentQuery(),
+            {stats : stats, container : container});
+
   var initIncSearch = function() {
     // 2回初期化されないようにするために
     // すぐにイベントハンドラを削除する
