@@ -7,7 +7,7 @@
 // ==/UserScript==
 //
 // auther : mollifier http://d.hatena.ne.jp/mollifier/
-// version : 0.0.1b
+// version : 0.0.1
 //
 // GoogleIncSearch is released under the MIT License.
 // http://www.opensource.org/licenses/mit-license.php
