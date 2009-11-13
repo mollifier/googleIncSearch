@@ -109,8 +109,16 @@
     };
   };
 
+  // 検索語句を入力するテキストボックス
   var box = document.getElementsByName("q")[0];
+  // 検索結果の統計情報
+  var stats = document.getElementById("resultStats");
+  // 検索結果の内容
   var container = document.getElementById("res");
+
+  // 検索結果のキャッシュ
+  // 以下の構造のオブジェクトである
+  //{stats : 検索結果の統計情報, container : 検索結果の内容}
   var cache = Utils.createCache();
   var state = searchState(box.value);
 
@@ -126,12 +134,15 @@
         return;
       }
 
-      var addItem = cache.get(state.getCurrentQuery());
+      var cacheData = cache.get(state.getCurrentQuery());
 
-      if (addItem) {
+      if (cacheData) {
         // キャッシュにデータがある場合
-        container.parentNode.replaceChild(addItem, container);
-        container = addItem;
+        stats.parentNode.replaceChild(cacheData.stats, stats);
+        container.parentNode.replaceChild(cacheData.container, container);
+
+        stats = cacheData.stats;
+        container = cacheData.container;
       } else {
         // キャッシュにデータがない場合
         var url = location.protocol + "//" + location.host + "/search?q=" + state.getCurrentQuery();
@@ -146,23 +157,34 @@
               state.stopSearching();
 
               var doc =  Utils.createHTMLDocument(res.responseText);
-              var responseItem = doc.getElementById("res");
-              cache.set(query, responseItem);
+              var responseData = {
+                stats : doc.getElementById("resultStats"),
+                container : doc.getElementById("res")
+              };
+              cache.set(query, responseData);
 
-              var item, newItem;
+              var addData = {stats : null, container : null};
               if (state.isSearching()) {
                 // 別のリクエストを送信して結果待ちである場合
-                item = document.createElement("p");
-                item.id = "res";
-                item.appendChild(document.createTextNode("loading ..."));
+                addData.container = document.createElement("p");
+                addData.container.id = "res";
+                addData.container.appendChild(document.createTextNode("loading ..."));
+                // stats(統計情報) には何も表示しない
               } else {
                 // 結果待ちリクエストがない場合
-                item = responseItem;
+                addData.stats = responseData.stats;
+                addData.container = responseData.container;
               }
 
-              newItem = document.importNode(item, true);
-              container.parentNode.replaceChild(newItem, container);
-              container = newItem;
+              if (addData.stats) {
+                addData.stats = document.importNode(addData.stats, true);
+                stats.parentNode.replaceChild(addData.stats, stats);
+                stats = addData.stats;
+              }
+
+              addData.container = document.importNode(addData.container, true);
+              container.parentNode.replaceChild(addData.container, container);
+              container = addData.container;
             }
           });
         })(state.getCurrentQuery());
