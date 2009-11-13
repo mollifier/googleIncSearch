@@ -13,6 +13,16 @@
 // http://www.opensource.org/licenses/mit-license.php
 
 (function() {
+  // 設定値
+  var Config = {
+    // 入力値の変化をチェックする時間(msec)
+    // キー入力を開始してからこの間だけ
+    // 値が変わったかどうかを周期的にチェックする
+    valueChangeCheckTime : 4000,
+
+    // テキストボックスの入力値の変化をチェックする間隔(msec)
+    checkInterval : 300
+  };
 
   // ユーティリティ関数
   var Utils = {
@@ -58,17 +68,6 @@
       };
     }
 
-  };
-
-  // 設定値
-  var Config = {
-    // 入力値の変化をチェックする時間(msec)
-    // キー入力を開始してからこの間だけ
-    // 値が変わったかどうかを周期的にチェックする
-    valueChangeCheckTime : 4000,
-
-    // テキストボックスの入力値の変化をチェックする間隔(msec)
-    checkInterval : 300
   };
 
   // 現在の検索状態
