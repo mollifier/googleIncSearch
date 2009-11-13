@@ -32,6 +32,10 @@
       return text.replace(/^\s+/, "").replace(/\s+$/, "");
     },
 
+    replaceNode : function(oldNode, newNode) {
+        oldNode.parentNode.replaceChild(newNode, oldNode);
+    },
+
     // キャッシュオブジェクトを作成する
     createCache : function() {
       var data = {};
@@ -138,8 +142,8 @@
 
       if (cacheData) {
         // キャッシュにデータがある場合
-        stats.parentNode.replaceChild(cacheData.stats, stats);
-        container.parentNode.replaceChild(cacheData.container, container);
+        Utils.replaceNode(stats, cacheData.stats);
+        Utils.replaceNode(container, cacheData.container);
 
         stats = cacheData.stats;
         container = cacheData.container;
@@ -178,12 +182,12 @@
 
               if (addData.stats) {
                 addData.stats = document.importNode(addData.stats, true);
-                stats.parentNode.replaceChild(addData.stats, stats);
+                Utils.replaceNode(stats, addData.stats);
                 stats = addData.stats;
               }
 
               addData.container = document.importNode(addData.container, true);
-              container.parentNode.replaceChild(addData.container, container);
+              Utils.replaceNode(container, addData.container);
               container = addData.container;
             }
           });
