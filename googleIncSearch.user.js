@@ -111,6 +111,7 @@
 
   var box = document.getElementsByName("q")[0];
   var container = document.getElementById("res");
+  var cache = Utils.createCache();
   var state = searchState(box.value);
 
   var initIncSearch = function() {
@@ -191,8 +192,6 @@
     }, Config.valueChangeCheckTime);
 
   };
-
-  var cache = Utils.createCache();
 
   box.addEventListener("keyup", initIncSearch, false);
 })();
