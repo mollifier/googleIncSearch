@@ -1,5 +1,9 @@
+require 'rake/clean'
+
 COMMAND = "rdiscount"
 OUTPUT_FILE_NAME = "README.html"
+
+CLOBBER.include(OUTPUT_FILE_NAME)
 
 task :default => OUTPUT_FILE_NAME
 
