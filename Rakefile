@@ -1,8 +1,10 @@
 COMMAND = "rdiscount"
+OUTPUT_FILE_NAME = "README.html"
 
-task :default => "html"
+task :default => OUTPUT_FILE_NAME
 
-file "html" => ["README.md"] do
-  sh "#{COMMAND} README.md > README.html" 
+desc "Convert README.md to HTML."
+file OUTPUT_FILE_NAME => ["README.md"] do |t|
+  sh "#{COMMAND} #{t.prerequisites[0]} > #{t.name}"
 end
 
